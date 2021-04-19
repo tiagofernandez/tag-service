@@ -1,0 +1,27 @@
+# Dev
+.air.toml
+.editorconfig
+cover.out
+tag-server
+
+# Environment
+.env.*
+
+# Git
+.git/
+.gitignore
+git-hooks/
+
+# IDEs
+.idea/
+.vscode/
+
+# Project
+.dockerignore
+Dockerfile
+Makefile
+README.md
+
+# Web
+web/**
+!web/build/
