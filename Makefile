@@ -6,6 +6,10 @@ ifeq (, $(shell which go))
     $(error "Please install Go: https://golang.org/doc/install")
 endif
 
+ifeq (, $(shell which yarn))
+    $(error "Please install Yarn: https://classic.yarnpkg.com/en/docs/install/")
+endif
+
 IMAGE := tag-server
 TAG := latest
 
