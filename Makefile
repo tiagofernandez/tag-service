@@ -10,8 +10,13 @@ ifeq (, $(shell which yarn))
     $(error "Please install Yarn: https://classic.yarnpkg.com/en/docs/install/")
 endif
 
-IMAGE := tag-server
-TAG := latest
+APP := tag-service
+NS := tag-system
+ORG := brazur
+
+IMAGE := github.com/$(ORG)/$(APP)
+VERSION := latest
+PORT := 6060
 
 define HELP
 
@@ -20,8 +25,10 @@ Usage:
 
     make init                  initialize git repo
     make install               download modules and install dependencies
-    make clean                 remove object files and cached files
+    make clean                 remove build files and cached files
     make build                 compile packages and dependencies
+    make build-api             build the api server
+    make build-web             build the web client
     make run                   compile and run the main program
     make run-api               run the api server in dev mode
     make run-web               run the web application in dev mode
@@ -35,12 +42,17 @@ Usage:
     make cover-report          generate test coverage report
     make doc                   generate html documentation
 
-	make docker-clean          prune stopped containers and dangling images
-	make docker-image          build the docker image
-	make docker-run            launch a detached container
-	make docker-run-shell      launch an interactive container
-	make docker-debug          debug the running container
-	make docker-stop           stop the detached container
+    make docker-clean          prune stopped containers and dangling images
+    make docker-image          build the docker image
+    make docker-run            launch a detached container
+    make docker-run-shell      launch an interactive container
+    make docker-debug          debug the running container
+    make docker-stop           stop the detached container
+
+    make k8s-cluster           create the kind cluster
+    make k8s-dev               run the kubernetes app in dev mode
+    make k8s-run               run the kubernetes app in detached mode
+    make k8s-debug             debug the running service
 endef
 
 export HELP
@@ -63,10 +75,15 @@ install: init
 
 clean:
 	go clean
+	rm -rf web/build/
 
-build: clean
+build-api:
 	go build .
+
+build-web:
 	cd web && yarn build
+
+build: clean build-api build-web
 
 run: build
 	go run main.go
@@ -110,16 +127,28 @@ docker-clean:
 	docker system prune -f
 
 docker-image: build
-	docker build --rm=true --squash -t $(IMAGE):$(TAG) .
+	docker build --rm=true -t $(IMAGE):$(VERSION) .
 
 docker-run:
-	docker run --restart=always -p 6060:6060 -d $(IMAGE):$(TAG)
+	docker run --restart=always -p $(PORT):$(PORT) -d $(IMAGE):$(VERSION)
 
 docker-run-shell:
-	docker run -p 6060:6060 -ti $(IMAGE):$(TAG) /bin/sh
+	docker run -p $(PORT):$(PORT) -ti $(IMAGE):$(VERSION) /bin/sh
 
 docker-debug:
-	docker exec -ti $(shell docker ps | grep $(IMAGE):$(TAG) | awk '{print $$1}') /bin/sh
+	docker exec -ti $(shell docker ps | grep $(IMAGE):$(VERSION) | awk '{print $$1}') /bin/sh
 
 docker-stop:
-	docker stop $(shell docker ps | grep $(IMAGE):$(TAG) | awk '{print $$1}')
+	docker stop $(shell docker ps | grep $(IMAGE):$(VERSION) | awk '{print $$1}')
+
+k8s-cluster:
+	kind create cluster --name $(ORG) --config kind.yaml
+
+k8s-dev:
+	skaffold dev --port-forward
+
+k8s-run: build
+	skaffold run --port-forward
+
+k8s-debug:
+	kubectl exec -ti service/$(APP) -n $(NS) -- sh

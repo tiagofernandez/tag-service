@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/brazur/tag-server/api"
+	"github.com/brazur/tag-service/api"
 
 	"time"
 

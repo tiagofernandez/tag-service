@@ -1,0 +1,13 @@
+apiVersion: skaffold/v2beta24
+kind: Config
+build:
+  artifacts:
+    - image: github.com/brazur/tag-service
+      sync:
+        manual:
+          - src: "web/build/**"
+            dest: "."
+deploy:
+  kustomize:
+    paths:
+      - "./manifests"

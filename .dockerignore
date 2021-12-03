@@ -2,7 +2,7 @@
 .air.toml
 .editorconfig
 cover.out
-tag-server
+tag-service
 
 # Environment
 .env.*

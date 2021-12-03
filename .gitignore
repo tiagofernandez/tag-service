@@ -7,7 +7,7 @@
 *.dll
 *.so
 *.dylib
-tag-server
+tag-service
 
 # Test binary, built with `go test -c`
 *.test

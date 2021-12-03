@@ -1,13 +1,11 @@
-module github.com/brazur/tag-server
+module github.com/brazur/tag-service
 
 go 1.16
 
 require (
-	github.com/cosmtrek/air v1.26.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/labstack/echo/v4 v4.2.2
 	github.com/mattn/go-colorable v0.1.8 // indirect
-	github.com/pelletier/go-toml v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20210415154028-4f45737414dc // indirect
 	golang.org/x/net v0.0.0-20210415231046-e915ea6b2b7d // indirect
 	golang.org/x/sys v0.0.0-20210420205809-ac73e9fd8988 // indirect

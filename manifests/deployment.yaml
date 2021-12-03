@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tag-service
+  labels:
+    app: tag-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tag-service
+  template:
+    metadata:
+      labels:
+        app: tag-service
+    spec:
+      containers:
+        - name: tag-service
+          image: github.com/brazur/tag-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6060
