@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "id": "1st-feature-flag",
+      "toggleType": "BOOLEAN",
+      "description": "First feature flag",
+      "tags": ["poc", "test"],
+      "createdBy": "system@acme.org",
+      "createdAt": 1639043672950,
+      "lastUpdatedBy": "system@acme.org",
+      "lastUpdatedAt": 1639043672950,
+      "publicFlag": false,
+      "ignoreUpdates": false
+    },
+    {
+      "id": "2nd-feature-flag",
+      "toggleType": "BOOLEAN",
+      "description": "Second feature flag",
+      "tags": ["poc", "test"],
+      "createdBy": "system@acme.org",
+      "createdAt": 1639043672960,
+      "lastUpdatedBy": "system@acme.org",
+      "lastUpdatedAt": 1639043672960,
+      "publicFlag": true,
+      "ignoreUpdates": false
+    },
+    {
+      "id": "3rd-feature-flag",
+      "toggleType": "BOOLEAN",
+      "description": "Third feature flag",
+      "tags": ["poc", "test"],
+      "createdBy": "system@acme.org",
+      "createdAt": 1639043672970,
+      "lastUpdatedBy": "system@acme.org",
+      "lastUpdatedAt": 1639043672970,
+      "publicFlag": false,
+      "ignoreUpdates": true
+    }
+  ],
+  "totalResults": 3
+}

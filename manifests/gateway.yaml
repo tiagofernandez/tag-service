@@ -1,0 +1,56 @@
+apiVersion: "tanzu.vmware.com/v1"
+kind: SpringCloudGateway
+metadata:
+  name: tag-gateway
+spec:
+  env:
+    - name: JAVA_OPTS
+      value: >
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9092
+  serviceAccount:
+    name: default
+  extensions:
+    custom:
+      - feature-flags
+    secretsProviders:
+      - name: jwt-keys-for-vmware-tanzu
+        vault:
+          roleName: scg-role
+    filters:
+      jwtKey:
+        enabled: true
+        secretsProviderName: jwt-keys-for-vmware-tanzu
+
+---
+apiVersion: "tanzu.vmware.com/v1"
+kind: SpringCloudGatewayMapping
+metadata:
+  name: tag-gateway-mapping
+spec:
+  gatewayRef:
+    name: tag-gateway
+  routeConfigRef:
+    name: tag-gateway-routes
+
+---
+apiVersion: "tanzu.vmware.com/v1"
+kind: SpringCloudGatewayRouteConfig
+metadata:
+  name: tag-gateway-routes
+spec:
+  service:
+    name: tag-service
+    filters:
+      - StripPrefix=0
+      - FeatureFlags
+  routes:
+    - predicates:
+        - Path=/api/health-check
+        - Method=GET
+      filters:
+        - RateLimit=2,10s
+        - JwtKey={claim:kid}
+    - predicates:
+        - Path=/api/fixtures/feature-flags
+      filters:
+        - DumpFeatureFlags

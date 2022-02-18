@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - uri: http://localhost:7414
+          predicates:
+            - Path=/api/fixtures/feature-flags
+          filters:
+            - FeatureFlags
+            - DumpFeatureFlags
